@@ -24,11 +24,8 @@
  * Contact: Txus Ballesteros <txus.ballesteros@gmail.com>
 -->
 <resources>
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar" />
-
-    <style name="chart_style">
-        <item name="android:layout_width">@dimen/chart_size</item>
-        <item name="android:layout_height">@dimen/chart_size</item>
-        <item name="strokeSize">@dimen/stroke_size</item>
-    </style>
+    <color name="chart_value_1">#2d4302</color>
+    <color name="chart_value_2">#75a80d</color>
+    <color name="chart_value_3">#8fc026</color>
+    <color name="chart_value_4">#B5CC84</color>
 </resources>

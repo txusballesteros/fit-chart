@@ -23,15 +23,58 @@
  *
  * Contact: Txus Ballesteros <txus.ballesteros@gmail.com>
 -->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#fafafa"
+    android:padding="8dp"
+    android:gravity="center">
 
-    <com.txusballesteros.widgets.FitChart
-        android:layout_width="@dimen/chart_size"
-        android:layout_height="@dimen/chart_size"
-        android:layout_centerInParent="true"
-        android:background="#ff0000"/>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-</RelativeLayout>
+        <com.txusballesteros.widgets.FitChart
+            style="@style/chart_style"
+            android:layout_gravity="center"
+            android:id="@+id/fitChart" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="200dp"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="#212121"
+                android:gravity="center"
+                android:text="2.500 steps today"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="200dp"
+                android:textSize="20sp"
+                android:textColor="#757575"
+                android:gravity="center"
+                android:lines="2"
+                android:text="Your goal is 10.000 steps." />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Add Values"/>
+
+</LinearLayout>

@@ -24,20 +24,239 @@
  */
 package com.txusballesteros.widgets;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
+import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 
-public class FitChart extends FrameLayout {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+public class FitChart extends View {
+    public static final int DEFAULT_VIEW_RADIUS = 0;
+    public static final int DEFAULT_MIN_VALUE = 0;
+    public static final int DEFAULT_MAX_VALUE = 100;
+    public static final int START_ANGLE = -90;
+    public static final int ANIMATION_DURATION = 400;
+    public static final float INITIAL_ANIMATION_PROGRESS = 0.0f;
+    public static final float MAXIMUN_SWEEP_ANGLE = 360f;
+    private RectF drawableArea;
+    private Paint backStrokePaint;
+    private int backStrokeColor;
+    private int chartValueStrokeColor;
+    private float strokeSize;
+    private float minValue = DEFAULT_MIN_VALUE;
+    private float maxValue = DEFAULT_MAX_VALUE;
+    private List<FitChartValue> chartValues;
+    private float animationProgress = INITIAL_ANIMATION_PROGRESS;
+    private float maxSweepAngle = MAXIMUN_SWEEP_ANGLE;
+
+    public void setMinValue(float value) {
+        minValue = value;
+    }
+
+    public void setMaxValue(float value) {
+        maxValue = value;
+    }
+
+    public float getMinValue() {
+        return minValue;
+    }
+
+    public float getMaxValue() {
+        return maxValue;
+    }
+
+    public void setValue(float value) {
+        chartValues.clear();
+        FitChartValue chartValue = new FitChartValue(value, chartValueStrokeColor);
+        chartValue.setPaint(buildPaintForValue());
+        chartValue.setStartAngle(START_ANGLE);
+        chartValue.setSweepAngle(calculateSweepAngle(value));
+        chartValues.add(chartValue);
+        maxSweepAngle = chartValue.getSweepAngle();
+        playAnimation();
+    }
+
+    public void setValues(Collection<FitChartValue> values) {
+        chartValues.clear();
+        maxSweepAngle = 0;
+        float offsetSweepAngle = START_ANGLE;
+        for (FitChartValue chartValue : values) {
+            float sweepAngle = calculateSweepAngle(chartValue.getValue());
+            chartValue.setPaint(buildPaintForValue());
+            chartValue.setStartAngle(offsetSweepAngle);
+            chartValue.setSweepAngle(sweepAngle);
+            chartValues.add(chartValue);
+            offsetSweepAngle += sweepAngle;
+            maxSweepAngle += sweepAngle;
+        }
+        playAnimation();
+    }
+
+    void setAnimationSeek(float value) {
+        animationProgress = value;
+        invalidate();
+    }
+
+    private Paint buildPaintForValue() {
+        Paint paint = new Paint();
+        paint.setFlags(getPaintFlags());
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(strokeSize);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        return paint;
+    }
+
     public FitChart(Context context) {
         super(context);
+        initializeView(null);
     }
 
     public FitChart(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initializeView(attrs);
     }
 
     public FitChart(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initializeView(attrs);
+    }
+
+    private void initializeView(AttributeSet attrs) {
+        chartValues = new ArrayList<>();
+        if (!isInEditMode()) {
+            Resources resources = getContext().getResources();
+            if (getBackground() == null) {
+                setBackgroundColor(resources.getColor(R.color.default_back_color));
+            }
+        }
+        readAttributes(attrs);
+        preparePaints();
+    }
+
+    private void calculateDrawableArea() {
+        float drawPadding = (strokeSize / 2);
+        float width = getWidth();
+        float height = getHeight();
+        float left = drawPadding;
+        float top = drawPadding;
+        float right = width - drawPadding;
+        float bottom = height - drawPadding;
+        drawableArea = new RectF(left, top, right, bottom);
+    }
+
+    private void readAttributes(AttributeSet attrs) {
+        Resources resources = getContext().getResources();
+        chartValueStrokeColor = resources.getColor(R.color.default_chart_value_color);
+        backStrokeColor = resources.getColor(R.color.default_back_stroke_color);
+        strokeSize = resources.getDimension(R.dimen.default_stroke_size);
+        if (attrs != null) {
+            TypedArray attributes = getContext()
+                    .getTheme().obtainStyledAttributes(attrs, R.styleable.FitChart, 0, 0);
+            strokeSize = attributes
+                    .getDimensionPixelSize(R.styleable.FitChart_strokeSize, (int) strokeSize);
+            chartValueStrokeColor = attributes
+                    .getColor(R.styleable.FitChart_strokeColor, chartValueStrokeColor);
+            attributes.recycle();
+        }
+    }
+
+    private void preparePaints() {
+        backStrokePaint = new Paint(getPaintFlags());
+        backStrokePaint.setColor(backStrokeColor);
+        backStrokePaint.setStyle(Paint.Style.STROKE);
+        backStrokePaint.setStrokeWidth(strokeSize);
+    }
+
+    private int getPaintFlags() {
+        return Paint.ANTI_ALIAS_FLAG;
+    }
+
+    private float getViewRadius() {
+        if (drawableArea != null) {
+            return (drawableArea.width() / 2);
+        } else {
+            return DEFAULT_VIEW_RADIUS;
+        }
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        calculateDrawableArea();
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        renderBack(canvas);
+        if (!isInEditMode()) {
+            renderValues(canvas);
+        }
+    }
+
+    private void renderBack(Canvas canvas) {
+        Path path = new Path();
+        float viewRadius = getViewRadius();
+        path.addCircle(drawableArea.centerX(), drawableArea.centerY(), viewRadius, Path.Direction.CCW);
+        canvas.drawPath(path, backStrokePaint);
+    }
+
+    private void renderValues(Canvas canvas) {
+        int valuesCounter = (chartValues.size() - 1);
+        for (int index = valuesCounter; index >= 0; index--) {
+            renderValue(canvas, chartValues.get(index));
+        }
+    }
+
+    private void renderValue(Canvas canvas, FitChartValue chartValue) {
+        float animationSeek = calculateAnimationSeek();
+        if (chartValue.getStartAngle() <= animationSeek) {
+            Path path = new Path();
+            float sweepAngle = calculateSweepAngle(animationSeek, chartValue);
+            path.addArc(drawableArea, chartValue.getStartAngle(), sweepAngle);
+            canvas.drawPath(path, chartValue.getPaint());
+        }
+    }
+
+    private float calculateSweepAngle(float animationSeek, FitChartValue value) {
+        float result;
+        float totalSizeOfValue = value.getStartAngle() + value.getSweepAngle();
+        if (totalSizeOfValue > animationSeek) {
+            result = animationSeek - value.getStartAngle();
+        } else {
+            result = value.getSweepAngle();
+        }
+        return result;
+    }
+
+    private float calculateAnimationSeek() {
+        return ((maxSweepAngle * animationProgress) + START_ANGLE);
+    }
+
+    private float calculateSweepAngle(float value) {
+        float chartValuesWindow = Math.max(minValue, maxValue) - Math.min(minValue, maxValue);
+        float chartValuesScale = (360f / chartValuesWindow);
+        return (value * chartValuesScale);
+    }
+
+    private void playAnimation() {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(this, "animationSeek", 0.0f, 1.0f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.setDuration(ANIMATION_DURATION);
+        animatorSet.setInterpolator(new DecelerateInterpolator());
+        animatorSet.setTarget(this);
+        animatorSet.play(animator);
+        animatorSet.start();
     }
 }

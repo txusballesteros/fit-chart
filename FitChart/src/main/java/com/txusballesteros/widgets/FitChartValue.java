@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+/*
  * Copyright Txus Ballesteros 2015 (@txusballesteros)
  *
  * This file is part of some open source application.
@@ -22,13 +21,53 @@
  * under the License.
  *
  * Contact: Txus Ballesteros <txus.ballesteros@gmail.com>
--->
-<resources>
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar" />
+ */
+package com.txusballesteros.widgets;
 
-    <style name="chart_style">
-        <item name="android:layout_width">@dimen/chart_size</item>
-        <item name="android:layout_height">@dimen/chart_size</item>
-        <item name="strokeSize">@dimen/stroke_size</item>
-    </style>
-</resources>
+import android.graphics.Paint;
+
+public class FitChartValue {
+    private final float value;
+    private final int color;
+    private Paint paint;
+    private float startAngle;
+    private float sweepAngle;
+
+    float getValue() {
+        return this.value;
+    }
+
+    int getColor() {
+        return this.color;
+    }
+
+    void setPaint(Paint paint) {
+        this.paint = paint;
+        this.paint.setColor(color);
+    }
+
+    void setStartAngle(float angle) {
+        this.startAngle = angle;
+    }
+
+    void setSweepAngle(float sweep) {
+        this.sweepAngle = sweep;
+    }
+
+    float getStartAngle() {
+        return this.startAngle;
+    }
+
+    float getSweepAngle() {
+        return this.sweepAngle;
+    }
+
+    Paint getPaint() {
+        return this.paint;
+    }
+
+    public FitChartValue(float value, int color) {
+        this.value = value;
+        this.color = color;
+    }
+}

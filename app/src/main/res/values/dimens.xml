@@ -24,5 +24,6 @@
  * Contact: Txus Ballesteros <txus.ballesteros@gmail.com>
 -->
 <resources>
-    <dimen name="chart_size">200dp</dimen>
+    <dimen name="chart_size">250dp</dimen>
+    <dimen name="stroke_size">18dp</dimen>
 </resources>
