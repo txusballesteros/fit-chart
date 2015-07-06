@@ -49,10 +49,12 @@ public class FitChart extends View {
     public static final int ANIMATION_DURATION = 400;
     public static final float INITIAL_ANIMATION_PROGRESS = 0.0f;
     public static final float MAXIMUN_SWEEP_ANGLE = 360f;
+    public static final int DESING_MODE_SWEEP_ANGLE = 216;
     private RectF drawableArea;
     private Paint backStrokePaint;
+    private Paint valueDesignPaint;
     private int backStrokeColor;
-    private int chartValueStrokeColor;
+    private int valueStrokeColor;
     private float strokeSize;
     private float minValue = DEFAULT_MIN_VALUE;
     private float maxValue = DEFAULT_MAX_VALUE;
@@ -78,7 +80,7 @@ public class FitChart extends View {
 
     public void setValue(float value) {
         chartValues.clear();
-        FitChartValue chartValue = new FitChartValue(value, chartValueStrokeColor);
+        FitChartValue chartValue = new FitChartValue(value, valueStrokeColor);
         chartValue.setPaint(buildPaintForValue());
         chartValue.setStartAngle(START_ANGLE);
         chartValue.setSweepAngle(calculateSweepAngle(value));
@@ -109,8 +111,7 @@ public class FitChart extends View {
     }
 
     private Paint buildPaintForValue() {
-        Paint paint = new Paint();
-        paint.setFlags(getPaintFlags());
+        Paint paint = getPaint();
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(strokeSize);
         paint.setStrokeCap(Paint.Cap.ROUND);
@@ -134,14 +135,17 @@ public class FitChart extends View {
 
     private void initializeView(AttributeSet attrs) {
         chartValues = new ArrayList<>();
-        if (!isInEditMode()) {
-            Resources resources = getContext().getResources();
-            if (getBackground() == null) {
-                setBackgroundColor(resources.getColor(R.color.default_back_color));
-            }
-        }
+        initializeBackground();
         readAttributes(attrs);
         preparePaints();
+    }
+
+    private void initializeBackground() {
+        if (!isInEditMode()) {
+            if (getBackground() == null) {
+                setBackgroundColor(getContext().getResources().getColor(R.color.default_back_color));
+            }
+        }
     }
 
     private void calculateDrawableArea() {
@@ -157,7 +161,7 @@ public class FitChart extends View {
 
     private void readAttributes(AttributeSet attrs) {
         Resources resources = getContext().getResources();
-        chartValueStrokeColor = resources.getColor(R.color.default_chart_value_color);
+        valueStrokeColor = resources.getColor(R.color.default_chart_value_color);
         backStrokeColor = resources.getColor(R.color.default_back_stroke_color);
         strokeSize = resources.getDimension(R.dimen.default_stroke_size);
         if (attrs != null) {
@@ -165,21 +169,32 @@ public class FitChart extends View {
                     .getTheme().obtainStyledAttributes(attrs, R.styleable.FitChart, 0, 0);
             strokeSize = attributes
                     .getDimensionPixelSize(R.styleable.FitChart_strokeSize, (int) strokeSize);
-            chartValueStrokeColor = attributes
-                    .getColor(R.styleable.FitChart_strokeColor, chartValueStrokeColor);
+            valueStrokeColor = attributes
+                    .getColor(R.styleable.FitChart_valueStrokeColor, valueStrokeColor);
+            backStrokeColor = attributes
+                    .getColor(R.styleable.FitChart_backStrokeColor, backStrokeColor);
             attributes.recycle();
         }
     }
 
     private void preparePaints() {
-        backStrokePaint = new Paint(getPaintFlags());
+        backStrokePaint = getPaint();
         backStrokePaint.setColor(backStrokeColor);
         backStrokePaint.setStyle(Paint.Style.STROKE);
         backStrokePaint.setStrokeWidth(strokeSize);
+        valueDesignPaint = getPaint();
+        valueDesignPaint.setColor(valueStrokeColor);
+        valueDesignPaint.setStyle(Paint.Style.STROKE);
+        valueDesignPaint.setStrokeCap(Paint.Cap.ROUND);
+        valueDesignPaint.setStrokeWidth(strokeSize);
     }
 
-    private int getPaintFlags() {
-        return Paint.ANTI_ALIAS_FLAG;
+    private Paint getPaint() {
+        if (!isInEditMode()) {
+            return new Paint(Paint.ANTI_ALIAS_FLAG);
+        } else {
+            return new Paint();
+        }
     }
 
     private float getViewRadius() {
@@ -197,12 +212,19 @@ public class FitChart extends View {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int width = getMeasuredWidth();
+        int height = getMeasuredHeight();
+        int size = Math.max(width, height);
+        setMeasuredDimension(size, size);
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         renderBack(canvas);
-        if (!isInEditMode()) {
-            renderValues(canvas);
-        }
+        renderValues(canvas);
     }
 
     private void renderBack(Canvas canvas) {
@@ -213,19 +235,29 @@ public class FitChart extends View {
     }
 
     private void renderValues(Canvas canvas) {
-        int valuesCounter = (chartValues.size() - 1);
-        for (int index = valuesCounter; index >= 0; index--) {
-            renderValue(canvas, chartValues.get(index));
+        if (!isInEditMode()) {
+            int valuesCounter = (chartValues.size() - 1);
+            for (int index = valuesCounter; index >= 0; index--) {
+                renderValue(canvas, chartValues.get(index));
+            }
+        } else {
+            renderValue(canvas, null);
         }
     }
 
     private void renderValue(Canvas canvas, FitChartValue chartValue) {
-        float animationSeek = calculateAnimationSeek();
-        if (chartValue.getStartAngle() <= animationSeek) {
+        if (!isInEditMode()) {
+            float animationSeek = calculateAnimationSeek();
+            if (chartValue.getStartAngle() <= animationSeek) {
+                Path path = new Path();
+                float sweepAngle = calculateSweepAngle(animationSeek, chartValue);
+                path.addArc(drawableArea, chartValue.getStartAngle(), sweepAngle);
+                canvas.drawPath(path, chartValue.getPaint());
+            }
+        } else {
             Path path = new Path();
-            float sweepAngle = calculateSweepAngle(animationSeek, chartValue);
-            path.addArc(drawableArea, chartValue.getStartAngle(), sweepAngle);
-            canvas.drawPath(path, chartValue.getPaint());
+            path.addArc(drawableArea, START_ANGLE, DESING_MODE_SWEEP_ANGLE);
+            canvas.drawPath(path, valueDesignPaint);
         }
     }
 

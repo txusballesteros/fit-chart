@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxWidth="200dp"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#212121"
                 android:gravity="center"
@@ -61,10 +61,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxWidth="200dp"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textColor="#757575"
                 android:gravity="center"
-                android:lines="2"
                 android:text="Your goal is 10.000 steps." />
 
         </LinearLayout>

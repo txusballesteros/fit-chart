@@ -26,6 +26,7 @@
 <resources>
     <declare-styleable name="FitChart">
         <attr name="strokeSize" format="dimension|reference" />
-        <attr name="strokeColor" format="color|reference" />
+        <attr name="valueStrokeColor" format="color|reference" />
+        <attr name="backStrokeColor" format="color|reference" />
     </declare-styleable>
 </resources>
