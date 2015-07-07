@@ -1,7 +1,7 @@
 Fit Chart
 =====================
 
-![Logo](assets/fit_chart_demo.gif)
+![](assets/overdraw_animation_mode.gif) ![](assets/linear_animation_mode.gif)
 
 ## License
 
