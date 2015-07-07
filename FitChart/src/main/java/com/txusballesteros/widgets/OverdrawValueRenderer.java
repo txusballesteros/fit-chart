@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+/*
  * Copyright Txus Ballesteros 2015 (@txusballesteros)
  *
  * This file is part of some open source application.
@@ -22,12 +21,25 @@
  * under the License.
  *
  * Contact: Txus Ballesteros <txus.ballesteros@gmail.com>
--->
-<resources>
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar" />
+ */
+package com.txusballesteros.widgets;
 
-    <style name="chart_style">
-        <item name="android:layout_width">@dimen/chart_size</item>
-        <item name="android:layout_height">@dimen/chart_size</item>
-    </style>
-</resources>
+import android.graphics.Path;
+import android.graphics.RectF;
+
+class OverdrawValueRenderer extends BaseRenderer implements Renderer {
+    public OverdrawValueRenderer(RectF drawingArea, FitChartValue value) {
+        super(drawingArea, value);
+    }
+
+    @Override
+    public Path buildPath(float animationProgress, float animationSeek) {
+        float startAngle = FitChart.START_ANGLE;
+        float valueSweepAngle = (getValue().getStartAngle() +  getValue().getSweepAngle());
+        valueSweepAngle -= startAngle;
+        float sweepAngle = valueSweepAngle * animationProgress;
+        Path path = new Path();
+        path.addArc(getDrawingArea(), startAngle, sweepAngle);
+        return path;
+    }
+}

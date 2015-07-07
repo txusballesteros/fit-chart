@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+/*
  * Copyright Txus Ballesteros 2015 (@txusballesteros)
  *
  * This file is part of some open source application.
@@ -22,12 +21,11 @@
  * under the License.
  *
  * Contact: Txus Ballesteros <txus.ballesteros@gmail.com>
--->
-<resources>
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar" />
+ */
+package com.txusballesteros.widgets;
 
-    <style name="chart_style">
-        <item name="android:layout_width">@dimen/chart_size</item>
-        <item name="android:layout_height">@dimen/chart_size</item>
-    </style>
-</resources>
+import android.graphics.Path;
+
+interface Renderer {
+    Path buildPath(float animationProgress, float animationSeek);
+}

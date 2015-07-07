@@ -52,8 +52,8 @@ public class MainActivity extends ActionBarActivity {
                 Collection<FitChartValue> values = new ArrayList<>();
                 values.add(new FitChartValue(30f, resources.getColor(R.color.chart_value_1)));
                 values.add(new FitChartValue(20f, resources.getColor(R.color.chart_value_2)));
-                values.add(new FitChartValue(10f, resources.getColor(R.color.chart_value_3)));
-                values.add(new FitChartValue(5f, resources.getColor(R.color.chart_value_4)));
+                values.add(new FitChartValue(15f, resources.getColor(R.color.chart_value_3)));
+                values.add(new FitChartValue(10f, resources.getColor(R.color.chart_value_4)));
                 fitChart.setValues(values);
             }
         });
