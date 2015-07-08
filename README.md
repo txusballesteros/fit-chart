@@ -3,6 +3,12 @@ Fit Chart
 
 ![](assets/overdraw_animation_mode.gif) ![](assets/linear_animation_mode.gif)
 
+## Latest Version
+
+[![Download](https://api.bintray.com/packages/txusballesteros/maven/FitChart/images/download.svg)](https://bintray.com/txusballesteros/maven/FitChart/_latestVersion)
+
+![](https://img.shields.io/hexpm/l/plug.svg) ![](https://img.shields.io/badge/platform-android-green.svg)
+
 ## License
 
 Copyright Txus Ballesteros 2015 (@txusballesteros)
