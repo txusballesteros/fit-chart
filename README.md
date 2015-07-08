@@ -5,9 +5,72 @@ Fit Chart
 
 ## Latest Version
 
-[![Download](https://api.bintray.com/packages/txusballesteros/maven/FitChart/images/download.svg)](https://bintray.com/txusballesteros/maven/FitChart/_latestVersion)
+[![Download](https://api.bintray.com/packages/txusballesteros/maven/FitChart/images/download.svg)](https://bintray.com/txusballesteros/maven/FitChart/_latestVersion) ![](https://img.shields.io/badge/platform-android-green.svg)
 
-![](https://img.shields.io/hexpm/l/plug.svg) ![](https://img.shields.io/badge/platform-android-green.svg)
+## How to use
+
+### Configuring your project dependencies
+
+Add the library dependency to your build.gradle file.
+
+```groovy
+dependencies {
+    ...
+    compile 'com.txusballesteros:FitChart:1.0'
+}
+```
+
+### Adding the view to your layout
+
+Add the view to your xml layout file.
+
+```xml
+<com.txusballesteros.widgets.FitChart
+            android:layout_width="200dp"
+            android:layout_height="200dp" />
+```
+
+### Styling the view
+
+If you want to customize the view, you can set the next attributes.
+
+```xml
+<com.txusballesteros.widgets.FitChart
+            ..
+            app:strokeSize="10dp"
+            app:valueStrokeColor="#ff0000"
+            app:backStrokeColor="#00ff00"
+            app:animationMode="overdraw" />
+```
+
+### Setting the values
+
+Setting the minimum and maximum values of the scale of the chart.
+
+```java
+final FitChart fitChart = (FitChart)findViewById(R.id.fitChart);
+               fitChart.setMinValue(0f);
+               fitChart.setMaxValue(100f);
+```
+
+Setting a single progress value.
+
+```java
+final FitChart fitChart = (FitChart)findViewById(R.id.fitChart);
+               fitChart.setValue(80f);
+```
+
+Setting a some progress values.
+
+```java
+Collection<FitChartValue> values = new ArrayList<>();
+values.add(new FitChartValue(30f, 0x2d4302));
+values.add(new FitChartValue(20f, 0x75a80d));
+values.add(new FitChartValue(15f, 0x8fc026));
+values.add(new FitChartValue(10f, 0xB5CC84));
+final FitChart fitChart = (FitChart)findViewById(R.id.fitChart);
+               fitChart.setValues(values);
+```
 
 ## License
 
