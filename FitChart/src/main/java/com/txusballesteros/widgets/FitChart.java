@@ -81,7 +81,12 @@ public class FitChart extends View {
         return maxValue;
     }
 
-    public void setValue(float value) {
+    /**
+     * Set value to the chart
+     * @param value
+     * @param playAnimation true to play animation, false don't play animation
+     */
+    public void setValue(float value, boolean playAnimation) {
         chartValues.clear();
         FitChartValue chartValue = new FitChartValue(value, valueStrokeColor);
         chartValue.setPaint(buildPaintForValue());
@@ -89,10 +94,25 @@ public class FitChart extends View {
         chartValue.setSweepAngle(calculateSweepAngle(value));
         chartValues.add(chartValue);
         maxSweepAngle = chartValue.getSweepAngle();
-        playAnimation();
+        if (playAnimation) {
+            playAnimation();
+        }
     }
 
-    public void setValues(Collection<FitChartValue> values) {
+    /**
+     * Set value to the chart and play animation
+     * @param value
+     */
+    public void setValue(float value) {
+        setValue(value, true);
+    }
+
+    /**
+     * Set a collection of values to the chart
+     * @param values
+     * @param playAnimation true to play animation, false don't play animation
+     */
+    public void setValues(Collection<FitChartValue> values, boolean playAnimation) {
         chartValues.clear();
         maxSweepAngle = 0;
         float offsetSweepAngle = START_ANGLE;
@@ -105,7 +125,17 @@ public class FitChart extends View {
             offsetSweepAngle += sweepAngle;
             maxSweepAngle += sweepAngle;
         }
-        playAnimation();
+        if (playAnimation) {
+            playAnimation();
+        }
+    }
+
+    /**
+     * Set a collection of values to the chart
+     * @param values
+     */
+    public void setValues(Collection<FitChartValue> values) {
+        setValues(values, true);
     }
 
     public void setAnimationMode(AnimationMode mode) {
