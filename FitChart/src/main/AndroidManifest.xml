@@ -23,9 +23,4 @@
  *
  * Contact: Txus Ballesteros <txus.ballesteros@gmail.com>
 -->
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.txusballesteros.widgets">
-
-    <application android:label="@string/app_name" />
-</manifest>
+<manifest package="com.txusballesteros.widgets"/>
