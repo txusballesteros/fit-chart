@@ -27,6 +27,7 @@ package com.txusballesteros.widgets.app;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.txusballesteros.widgets.FitChart;
@@ -35,7 +36,7 @@ import com.txusballesteros.widgets.FitChartValue;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
