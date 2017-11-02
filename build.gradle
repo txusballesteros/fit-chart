@@ -30,15 +30,15 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
+        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
     }
 }
 
 allprojects {
     ext {
-        libraryVersion = '1.0'
+        libraryVersion = '1.1'
         mavenGroupId = 'com.txusballesteros'
         siteUrl = 'https://github.com/txusballesteros/fit-chart'
         gitUrl = 'https://github.com/txusballesteros/fit-chart.git'
