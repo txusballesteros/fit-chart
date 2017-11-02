@@ -26,6 +26,10 @@
 <resources>
     <declare-styleable name="FitChart">
         <attr name="strokeSize" format="dimension|reference" />
+        <attr name="strokeCap" >
+            <enum name="round" value="0" />
+            <enum name="square" value="1" />
+        </attr>
         <attr name="valueStrokeColor" format="color|reference" />
         <attr name="backStrokeColor" format="color|reference" />
         <attr name="animationMode">

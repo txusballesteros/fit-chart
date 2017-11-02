@@ -52,12 +52,15 @@ public class FitChart extends View {
     static final float INITIAL_ANIMATION_PROGRESS = 0.0f;
     static final float MAXIMUM_SWEEP_ANGLE = 360f;
     static final int DESIGN_MODE_SWEEP_ANGLE = 216;
+    static final int STROKE_CAP_ROUND = 0;
+    static final int STROKE_CAP_SQUARE = 1;
     private RectF drawingArea;
     private Paint backStrokePaint;
     private Paint valueDesignPaint;
     private int backStrokeColor;
     private int valueStrokeColor;
     private float strokeSize;
+    private int strokeCap;
     private float minValue = DEFAULT_MIN_VALUE;
     private float maxValue = DEFAULT_MAX_VALUE;
     private List<FitChartValue> chartValues;
@@ -121,7 +124,11 @@ public class FitChart extends View {
         Paint paint = getPaint();
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(strokeSize);
-        paint.setStrokeCap(Paint.Cap.ROUND);
+        if (strokeCap == STROKE_CAP_SQUARE) {
+            paint.setStrokeCap(Paint.Cap.SQUARE);
+        } else {
+            paint.setStrokeCap(Paint.Cap.ROUND);
+        }
         return paint;
     }
 
@@ -176,6 +183,7 @@ public class FitChart extends View {
                     .getTheme().obtainStyledAttributes(attrs, R.styleable.FitChart, 0, 0);
             strokeSize = attributes
                     .getDimensionPixelSize(R.styleable.FitChart_strokeSize, (int) strokeSize);
+            strokeCap = attributes.getInt(R.styleable.FitChart_strokeCap, strokeCap);
             valueStrokeColor = attributes
                     .getColor(R.styleable.FitChart_valueStrokeColor, valueStrokeColor);
             backStrokeColor = attributes

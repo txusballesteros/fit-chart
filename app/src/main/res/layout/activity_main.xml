@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  * Copyright Txus Ballesteros 2015 (@txusballesteros)
  *
  * This file is part of some open source application.
@@ -27,46 +26,47 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#fafafa"
-    android:padding="8dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <com.txusballesteros.widgets.FitChart
+            android:id="@+id/fitChart"
             style="@style/chart_style"
             android:layout_gravity="center"
             app:animationMode="overdraw"
-            android:id="@+id/fitChart" />
+            app:strokeCap="square" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxWidth="200dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#212121"
                 android:gravity="center"
-                android:text="2.500 steps today"/>
+                android:maxWidth="200dp"
+                android:text="2.500 steps today"
+                android:textColor="#212121"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxWidth="200dp"
-                android:textSize="15sp"
-                android:textColor="#757575"
                 android:gravity="center"
-                android:text="Your goal is 10.000 steps." />
+                android:maxWidth="200dp"
+                android:text="Your goal is 10.000 steps."
+                android:textColor="#757575"
+                android:textSize="15sp" />
 
         </LinearLayout>
     </FrameLayout>
@@ -76,6 +76,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Add Values"/>
+        android:text="Add Values" />
 
 </LinearLayout>
