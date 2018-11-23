@@ -33,6 +33,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.graphics.SweepGradient;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -64,6 +65,7 @@ public class FitChart extends View {
     private float animationProgress = INITIAL_ANIMATION_PROGRESS;
     private float maxSweepAngle = MAXIMUM_SWEEP_ANGLE;
     private AnimationMode animationMode = AnimationMode.LINEAR;
+    private SweepGradient gradientShader = null;
 
     public void setMinValue(float value) {
         minValue = value;
@@ -83,7 +85,7 @@ public class FitChart extends View {
 
     public void setValue(float value) {
         chartValues.clear();
-        FitChartValue chartValue = new FitChartValue(value, valueStrokeColor);
+        FitChartValue chartValue = new FitChartValue(value, valueStrokeColor, gradientShader);
         chartValue.setPaint(buildPaintForValue());
         chartValue.setStartAngle(START_ANGLE);
         chartValue.setSweepAngle(calculateSweepAngle(value));
@@ -180,6 +182,15 @@ public class FitChart extends View {
                     .getColor(R.styleable.FitChart_valueStrokeColor, valueStrokeColor);
             backStrokeColor = attributes
                     .getColor(R.styleable.FitChart_backStrokeColor, backStrokeColor);
+            int from = attributes
+                    .getColor(R.styleable.FitChart_backStrokeGradientFrom, -1);
+            int to = attributes
+                    .getColor(R.styleable.FitChart_backStrokeGradientTo, -1);
+
+            if (from != -1&& to != -1) {
+                gradientShader = new SweepGradient(0f, 0f, from, to);
+            }
+
             int attrAnimationMode = attributes.getInteger(R.styleable.FitChart_animationMode, ANIMATION_MODE_LINEAR);
             if (attrAnimationMode == ANIMATION_MODE_LINEAR) {
                 animationMode = AnimationMode.LINEAR;
@@ -196,7 +207,13 @@ public class FitChart extends View {
         backStrokePaint.setStyle(Paint.Style.STROKE);
         backStrokePaint.setStrokeWidth(strokeSize);
         valueDesignPaint = getPaint();
-        valueDesignPaint.setColor(valueStrokeColor);
+        if (gradientShader != null) {
+            valueDesignPaint.setDither(true);
+            valueDesignPaint.setShader(gradientShader);
+
+        } else {
+            valueDesignPaint.setColor(valueStrokeColor);
+        }
         valueDesignPaint.setStyle(Paint.Style.STROKE);
         valueDesignPaint.setStrokeCap(Paint.Cap.ROUND);
         valueDesignPaint.setStrokeWidth(strokeSize);

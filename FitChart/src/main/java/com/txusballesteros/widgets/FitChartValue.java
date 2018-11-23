@@ -25,10 +25,12 @@
 package com.txusballesteros.widgets;
 
 import android.graphics.Paint;
+import android.graphics.SweepGradient;
 
 public class FitChartValue {
     private final float value;
     private final int color;
+    private final SweepGradient gradientShader;
     private Paint paint;
     private float startAngle;
     private float sweepAngle;
@@ -43,7 +45,14 @@ public class FitChartValue {
 
     void setPaint(Paint paint) {
         this.paint = paint;
-        this.paint.setColor(color);
+        if (gradientShader != null) {
+            this.paint.setDither(true);
+            this.paint.setShader(gradientShader);
+
+        } else {
+            this.paint.setColor(color);
+
+        }
     }
 
     void setStartAngle(float angle) {
@@ -66,8 +75,9 @@ public class FitChartValue {
         return this.paint;
     }
 
-    public FitChartValue(float value, int color) {
+    public FitChartValue(float value, int color, SweepGradient gradientShader) {
         this.value = value;
         this.color = color;
+        this.gradientShader = gradientShader;
     }
 }
