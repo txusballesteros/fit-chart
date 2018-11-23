@@ -65,7 +65,8 @@ public class FitChart extends View {
     private float animationProgress = INITIAL_ANIMATION_PROGRESS;
     private float maxSweepAngle = MAXIMUM_SWEEP_ANGLE;
     private AnimationMode animationMode = AnimationMode.LINEAR;
-    private SweepGradient gradientShader = null;
+    private int fromGradientColor;
+    private int toGradientColor;
 
     public void setMinValue(float value) {
         minValue = value;
@@ -85,13 +86,25 @@ public class FitChart extends View {
 
     public void setValue(float value) {
         chartValues.clear();
-        FitChartValue chartValue = new FitChartValue(value, valueStrokeColor, gradientShader);
+        SweepGradient gradient = createGradientIfNeeded();
+        FitChartValue chartValue = new FitChartValue(value, valueStrokeColor, gradient);
         chartValue.setPaint(buildPaintForValue());
         chartValue.setStartAngle(START_ANGLE);
         chartValue.setSweepAngle(calculateSweepAngle(value));
         chartValues.add(chartValue);
         maxSweepAngle = chartValue.getSweepAngle();
         playAnimation();
+    }
+
+    private SweepGradient createGradientIfNeeded() {
+        SweepGradient  gradient = null;
+        if(fromGradientColor != -1 && toGradientColor != -1) {
+            float cx = drawingArea != null ? drawingArea.centerX() : 0;
+            float cy = drawingArea != null ? drawingArea.centerY() : 0;
+            int[] colors = {fromGradientColor, toGradientColor, fromGradientColor};
+            gradient = new SweepGradient(cx, cy, colors, null);
+        }
+        return gradient;
     }
 
     public void setValues(Collection<FitChartValue> values) {
@@ -182,15 +195,11 @@ public class FitChart extends View {
                     .getColor(R.styleable.FitChart_valueStrokeColor, valueStrokeColor);
             backStrokeColor = attributes
                     .getColor(R.styleable.FitChart_backStrokeColor, backStrokeColor);
-            int from = attributes
+            fromGradientColor = attributes
                     .getColor(R.styleable.FitChart_valuekeGradientFrom, -1);
 
-            int to = attributes
-                    .getColor(R.styleable.FitChart_valuekeGradientTo, -1);
-            if (from != -1&& to != -1) {
-                gradientShader = new SweepGradient(0f, 0f, from, to);
-            }
-
+            toGradientColor = attributes
+                    .getColor(R.styleable.FitChart_valueGradientTo, -1);
             int attrAnimationMode = attributes.getInteger(R.styleable.FitChart_animationMode, ANIMATION_MODE_LINEAR);
             if (attrAnimationMode == ANIMATION_MODE_LINEAR) {
                 animationMode = AnimationMode.LINEAR;
@@ -207,6 +216,7 @@ public class FitChart extends View {
         backStrokePaint.setStyle(Paint.Style.STROKE);
         backStrokePaint.setStrokeWidth(strokeSize);
         valueDesignPaint = getPaint();
+        SweepGradient gradientShader = createGradientIfNeeded();
         if (gradientShader != null) {
             valueDesignPaint.setDither(true);
             valueDesignPaint.setShader(gradientShader);

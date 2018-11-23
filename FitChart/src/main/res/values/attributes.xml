@@ -28,8 +28,8 @@
         <attr name="strokeSize" format="dimension|reference" />
         <attr name="valueStrokeColor" format="color|reference" />
         <attr name="backStrokeColor" format="color|reference" />
-        <attr name="valuekeGradientFrom" format="color|reference" />
-        <attr name="valuekeGradientTo" format="color|reference" />
+        <attr name="valueGradientFrom" format="color|reference" />
+        <attr name="valueGradientTo" format="color|reference" />
         <attr name="animationMode">
             <enum name="linear" value="0" />
             <enum name="overdraw" value="1" />
