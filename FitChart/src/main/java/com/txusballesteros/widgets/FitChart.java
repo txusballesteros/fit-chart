@@ -183,10 +183,10 @@ public class FitChart extends View {
             backStrokeColor = attributes
                     .getColor(R.styleable.FitChart_backStrokeColor, backStrokeColor);
             int from = attributes
-                    .getColor(R.styleable.FitChart_backStrokeGradientFrom, -1);
-            int to = attributes
-                    .getColor(R.styleable.FitChart_backStrokeGradientTo, -1);
+                    .getColor(R.styleable.FitChart_valuekeGradientFrom, -1);
 
+            int to = attributes
+                    .getColor(R.styleable.FitChart_valuekeGradientTo, -1);
             if (from != -1&& to != -1) {
                 gradientShader = new SweepGradient(0f, 0f, from, to);
             }
@@ -210,7 +210,6 @@ public class FitChart extends View {
         if (gradientShader != null) {
             valueDesignPaint.setDither(true);
             valueDesignPaint.setShader(gradientShader);
-
         } else {
             valueDesignPaint.setColor(valueStrokeColor);
         }
