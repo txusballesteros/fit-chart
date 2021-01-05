@@ -24,7 +24,7 @@
  */
 package com.txusballesteros.widgets;
 
-public enum AnimationMode {
+public enum AnimMode {
     LINEAR,
     OVERDRAW
 }
