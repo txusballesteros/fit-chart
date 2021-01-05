@@ -63,7 +63,7 @@ public class FitChart extends View {
     private List<FitChartValue> chartValues;
     private float animationProgress = INITIAL_ANIMATION_PROGRESS;
     private float maxSweepAngle = MAXIMUM_SWEEP_ANGLE;
-    private AnimationMode animationMode = AnimationMode.LINEAR;
+    private AnimMode animationMode = AnimMode.LINEAR;
 
     public void setMinValue(float value) {
         minValue = value;
@@ -108,7 +108,7 @@ public class FitChart extends View {
         playAnimation();
     }
 
-    public void setAnimationMode(AnimationMode mode) {
+    public void setAnimationMode(AnimMode mode) {
         this.animationMode = mode;
     }
 
@@ -182,9 +182,9 @@ public class FitChart extends View {
                     .getColor(R.styleable.FitChart_backStrokeColor, backStrokeColor);
             int attrAnimationMode = attributes.getInteger(R.styleable.FitChart_animationMode, ANIMATION_MODE_LINEAR);
             if (attrAnimationMode == ANIMATION_MODE_LINEAR) {
-                animationMode = AnimationMode.LINEAR;
+                animationMode = AnimMode.LINEAR;
             } else {
-                animationMode = AnimationMode.OVERDRAW;
+                animationMode = AnimMode.OVERDRAW;
             }
             attributes.recycle();
         }
