@@ -27,8 +27,8 @@ package com.txusballesteros.widgets;
 import android.graphics.RectF;
 
 class RendererFactory {
-    public static Renderer getRenderer(AnimationMode mode, FitChartValue value, RectF drawingArea) {
-        if (mode == AnimationMode.LINEAR) {
+    public static Renderer getRenderer(AnimMode mode, FitChartValue value, RectF drawingArea) {
+        if (mode == AnimMode.LINEAR) {
             return new LinearValueRenderer(drawingArea, value);
         } else {
             return new OverdrawValueRenderer(drawingArea, value);
