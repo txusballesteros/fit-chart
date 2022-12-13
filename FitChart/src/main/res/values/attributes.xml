@@ -28,7 +28,7 @@
         <attr name="strokeSize" format="dimension|reference" />
         <attr name="valueStrokeColor" format="color|reference" />
         <attr name="backStrokeColor" format="color|reference" />
-        <attr name="animationMode">
+        <attr name="aniMode">
             <enum name="linear" value="0" />
             <enum name="overdraw" value="1" />
         </attr>
